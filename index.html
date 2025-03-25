@@ -18,6 +18,14 @@
       #output {
         margin-top: 20px;
       }
+      .task-container {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+      button {
+        margin-right: 5px;
+      }
     </style>
   </head>
   <body>
@@ -28,10 +36,11 @@
       <button id="create-task-btn">Create Task</button>
     </div>
     <div id="output"></div>
-    <script type="module">
-      import { createTask } from "./object.js";
 
-      // Attach the event listener to the button
+    <script type="module">
+      import { createTask } from "./task.js";
+
+      // Attach event listener to the button
       document
         .getElementById("create-task-btn")
         .addEventListener("click", createTask);

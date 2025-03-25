@@ -10,45 +10,55 @@ class Task {
 
   markCompleted() {
     this.completed = true;
-    this.displayTask(`Task "${this.title}" has been marked as completed.`);
+    this.updateDisplay();
   }
 
   updateTask(newTitle, newDescription) {
     if (!newTitle || !newDescription) {
-      throw new Error(
-        "Both title and description are required to update the task."
-      );
+      alert("Both title and description are required.");
+      return;
     }
+    // Remove old task
+    this.removeTask();
+
+    // Update task properties
     this.title = newTitle;
     this.description = newDescription;
-    this.displayTask(`Task updated to: ${this.title} - ${this.description}`);
+
+    // Display updated task
+    this.displayTask();
   }
 
   removeTask() {
-    const outputDiv = document.getElementById("output");
-    const taskElements = outputDiv.querySelectorAll(
-      `[data-title="${this.title}"]`
-    );
-    taskElements.forEach((element) => element.remove());
+    const taskElement = document.querySelector(`[data-title="${this.title}"]`);
+    if (taskElement) {
+      taskElement.remove();
+    }
   }
 
-  displayTask(message) {
+  displayTask() {
     const outputDiv = document.getElementById("output");
-    const taskDetails = document.createElement("div");
-    taskDetails.setAttribute("data-title", this.title);
-    taskDetails.innerHTML = `
-      <p><strong>Task:</strong> ${this.title}</p>
-      <p><strong>Description:</strong> ${this.description}</p>
-      <p><strong>Completed:</strong> ${this.completed ? "Yes" : "No"}</p>
-      <p>${message}</p>
-      <button onclick="markTaskCompleted('${
-        this.title
-      }')">Mark Completed</button>
-      <button onclick="updateTask('${this.title}')">Update Task</button>
-      <button onclick="deleteTask('${this.title}')">Delete Task</button>
-      <hr />
-    `;
-    outputDiv.appendChild(taskDetails);
+    const taskContainer = document.createElement("div");
+    taskContainer.className = "task-container";
+    taskContainer.setAttribute("data-title", this.title);
+
+    taskContainer.innerHTML = `
+          <p><strong>Task:</strong> ${this.title}</p>
+          <p><strong>Description:</strong> ${this.description}</p>
+          <p><strong>Completed:</strong> ${this.completed ? "Yes" : "No"}</p>
+          <button onclick="markTaskCompleted('${
+            this.title
+          }')">Mark Completed</button>
+          <button onclick="updateTask('${this.title}')">Update Task</button>
+          <button onclick="deleteTask('${this.title}')">Delete Task</button>
+      `;
+
+    outputDiv.appendChild(taskContainer);
+  }
+
+  updateDisplay() {
+    this.removeTask();
+    this.displayTask();
   }
 }
 
@@ -56,9 +66,9 @@ class Task {
 const tasks = [];
 
 // Create a new task
-function createTask() {
-  const title = document.getElementById("task-title").value;
-  const description = document.getElementById("task-desc").value;
+window.createTask = function () {
+  const title = document.getElementById("task-title").value.trim();
+  const description = document.getElementById("task-desc").value.trim();
 
   if (!title || !description) {
     alert("Please provide both a title and a description.");
@@ -67,10 +77,12 @@ function createTask() {
 
   const task = new Task(title, description);
   tasks.push(task);
-  task.displayTask("Task created.");
+  task.displayTask();
+
+  // Clear input fields
   document.getElementById("task-title").value = "";
   document.getElementById("task-desc").value = "";
-}
+};
 
 // Mark a task as completed
 window.markTaskCompleted = function (title) {
@@ -87,7 +99,7 @@ window.updateTask = function (title) {
     const newTitle = prompt("Enter new title:", task.title);
     const newDescription = prompt("Enter new description:", task.description);
     if (newTitle && newDescription) {
-      task.updateTask(newTitle, newDescription);
+      task.updateTask(newTitle.trim(), newDescription.trim());
     }
   }
 };
@@ -101,5 +113,4 @@ window.deleteTask = function (title) {
   }
 };
 
-// Export functions properly
-export { Task, createTask };
+export { createTask };
