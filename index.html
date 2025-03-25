@@ -25,9 +25,16 @@
     <div id="task-form">
       <input type="text" id="task-title" placeholder="Task Title" />
       <input type="text" id="task-desc" placeholder="Task Description" />
-      <button onclick="createTask()">Create Task</button>
+      <button id="create-task-btn">Create Task</button>
     </div>
     <div id="output"></div>
-    <script type="module" src="object.js"></script>
+    <script type="module">
+      import { createTask } from "./object.js";
+
+      // Attach the event listener to the button
+      document
+        .getElementById("create-task-btn")
+        .addEventListener("click", createTask);
+    </script>
   </body>
 </html>

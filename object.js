@@ -1,4 +1,3 @@
-// Task class to manage tasks in a simple task management application
 class Task {
   constructor(title, description) {
     if (!title || !description) {
@@ -57,7 +56,7 @@ class Task {
 const tasks = [];
 
 // Create a new task
-window.createTask = function () {
+function createTask() {
   const title = document.getElementById("task-title").value;
   const description = document.getElementById("task-desc").value;
 
@@ -71,7 +70,7 @@ window.createTask = function () {
   task.displayTask("Task created.");
   document.getElementById("task-title").value = "";
   document.getElementById("task-desc").value = "";
-};
+}
 
 // Mark a task as completed
 window.markTaskCompleted = function (title) {
@@ -102,4 +101,5 @@ window.deleteTask = function (title) {
   }
 };
 
-export default Task;
+// Export functions properly
+export { Task, createTask };
